@@ -20,7 +20,7 @@ const bootstrapUser = async () => {
   const token = auth.getToken();
   // existence of token means the logged in state, so bootstrap it
   if (token) {
-    const data = await http({ endpoint: "me", token });
+    const data = await http({ endpoint: "users/me", token });
     user = data.user;
   }
   return user;
