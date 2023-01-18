@@ -20,7 +20,6 @@ export const LoginScreen = () => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      {user ? <div>Log in successfully, {user.name}!</div> : null}
       <div>
         <label htmlFor="username">Username</label>
         <input type="text" id={"username"} />
