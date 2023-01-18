@@ -2,6 +2,7 @@ import "./App.css";
 import { AuthenticatedApp } from "authenticated-app";
 import { UnauthenticatedApp } from "unauthenticated-app";
 import { useAuth } from "context/auth-context";
+import 'antd/dist/reset.css';
 
 function App() {
   const { user } = useAuth();

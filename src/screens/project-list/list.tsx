@@ -1,37 +1,28 @@
+import { Table } from "antd";
 import { User } from "./search-panel";
 
 interface Project {
   id: string;
   name: string;
   personId: string;
-  pin:boolean;
-  organization:string;
+  pin: boolean;
+  organization: string;
 }
 interface ListProps {
-  users: User[],
-  list: Project[]
+  users: User[];
+  list: Project[];
 }
-export const List = ({ list, users }:ListProps) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Project Name</th>
-          <th>Person in Charge</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((project) => (
-          <tr key={project.id}>
-            <td>{project.name}</td>
-            {/*undefined.name*/}
-            <td>
-              {users.find(user => user.id === project.personId)?.name ||
-                "Unknown"}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+export const List = ({ list, users }: ListProps) => {
+  return <Table pagination={false} columns={[{
+    title: 'Task Name',
+    dataIndex: 'name',
+    sorter: (a, b) => a.name.localeCompare(b.name)
+  }, {
+    title: 'User Name',
+    render(value, project) {
+      return <span>
+        {users.find((user: User) => user.id === project.personId)?.name || "Unknown"}
+      </span>
+    }
+  }]} dataSource={list} />;
 };
