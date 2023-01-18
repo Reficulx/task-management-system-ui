@@ -4,9 +4,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  title: string;
-  organization: string;
-  token: string;
+  accessToken: string;
+  tokenType: string;
+  roles: string[];
 }
 
 interface SearchPanelProps {

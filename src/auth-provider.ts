@@ -7,12 +7,12 @@ const localStorageKey = "__auth_provider_token__"
 export const getToken = () => window.localStorage.getItem(localStorageKey)
 
 export const handleUserResponse = (user: User) => {
-  window.localStorage.setItem(localStorageKey, user.token || "")
+  window.localStorage.setItem(localStorageKey, user.accessToken || "")
   return user
 }
 
 export const login = (data: {username: string, password:string}) => {
-  return fetch(`${apiUrl}/login`, {
+  return fetch(`${apiUrl}/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,8 +28,8 @@ export const login = (data: {username: string, password:string}) => {
 } 
 
 
-export const register = (data: {username: string, password:string}) => {
-  return fetch(`${apiUrl}/register`, {
+export const register = (data: {username: string, password:string, email:string}) => {
+  return fetch(`${apiUrl}/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

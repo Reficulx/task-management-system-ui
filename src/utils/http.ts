@@ -20,13 +20,15 @@ export const http = async ({endpoint, data, token, headers, ...customConfig}: Co
     },
     ...customConfig
   }
+  /*
   if (config.method.toUpperCase() === 'GET') {
-    endpoint += `?${qs.stringify(data)}`
-  } else {
+    endpoint += `\/${qs.stringify(data)}`
+  } else if (config.method.toUpperCase) {
     config.body = JSON.stringify(data || {})
   }
+  */
   return window.fetch(`${apiUrl}/${endpoint}`, config).then(async response => {
-    if (response.status === 401) {
+    if (response.status !== 200) {
       await auth.logout()
       window.location.reload() // refresh the current page 
       return Promise.reject({message: "Please login again!"})
@@ -48,5 +50,5 @@ export const http = async ({endpoint, data, token, headers, ...customConfig}: Co
 export const useHttp = () => {
   const {user} = useAuth()
   // TS Utility type, eg. Parameter 
-  return (config:Config) => http({...config, token:user?.token})
+  return (config:Config) => http({...config, token:user?.accessToken})
 } 
