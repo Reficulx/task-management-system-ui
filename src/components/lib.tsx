@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Spin, Typography } from "antd";
 
 export const Row = styled.div<{
   gap?: number | boolean;
@@ -8,9 +9,10 @@ export const Row = styled.div<{
   display: flex;
   flex-direction: row; // fyi: default value of flex-direction is row
   align-items: center;
-  justify-content: ${props => props.between ? 'space-between' : undefined};
-  margin-bottom: ${props => props.marginBottom + 'rem'};
-  > * { // select the child elements 
+  justify-content: ${(props) => (props.between ? "space-between" : undefined)};
+  margin-bottom: ${(props) => props.marginBottom + "rem"};
+  > * {
+    // select the child elements
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     margin-right: ${(props) =>
@@ -21,3 +23,22 @@ export const Row = styled.div<{
         : undefined};
   }
 `;
+
+export const FullPageLoading = () => (
+  <FullPage>
+    <Spin size={"large"} />
+  </FullPage>
+);
+
+const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
+  <FullPage>
+    <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+  </FullPage>
+);

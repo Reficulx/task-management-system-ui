@@ -3,6 +3,8 @@ import * as auth from "auth-provider";
 import { User } from "screens/project-list/search-panel";
 import { http } from "utils/http";
 import { useMount } from "utils";
+import { useAsync } from "utils/use-async";
+import { FullPageErrorFallback, FullPageLoading } from "components/lib";
 
 interface SigninForm {
   username: string;
@@ -21,7 +23,7 @@ const bootstrapUser = async () => {
   if (accessToken) {
     const data = await http({ endpoint: "users/me", token: accessToken });
     // data = {id: string, username: string, email: string }
-    user = {...data, accessToken}; 
+    user = { ...data, accessToken };
   }
   return user;
 };
@@ -38,7 +40,17 @@ const AuthContext = createContext<
 AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null); // if not specifying a generic type, useState engenders the 'user' the type that it deducted from the initial state
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    isError,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
+
+  // const [user, setUser] = useState<User | null>(null); // if not specifying a generic type, useState engenders the 'user' the type that it deducted from the initial state
   const login = (form: SigninForm) =>
     auth.login(form).then((user) => setUser(user));
   const register = (form: SignupForm) =>
@@ -46,8 +58,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => auth.logout().then(() => setUser(null));
 
   useMount(() => {
-    bootstrapUser().then(setUser);
+    run(bootstrapUser());
   });
+
+  if (isIdle || isLoading) {
+    return <FullPageLoading />;
+  }
+  if (isError) {
+    return <FullPageErrorFallback error={error}/>;
+  }
+
   return (
     <AuthContext.Provider
       children={children}
