@@ -7,7 +7,6 @@ import { useMount } from "utils";
 interface SigninForm {
   username: string;
   password: string;
-  email?: string;
 }
 interface SignupForm {
   username: string;
@@ -17,11 +16,12 @@ interface SignupForm {
 
 const bootstrapUser = async () => {
   let user = null;
-  const token = auth.getToken();
+  const accessToken = auth.getToken();
   // existence of token means the logged in state, so bootstrap it
-  if (token) {
-    const data = await http({ endpoint: "users/me", token });
-    user = data.user;
+  if (accessToken) {
+    const data = await http({ endpoint: "users/me", token: accessToken });
+    // data = {id: string, username: string, email: string }
+    user = {...data, accessToken}; 
   }
   return user;
 };

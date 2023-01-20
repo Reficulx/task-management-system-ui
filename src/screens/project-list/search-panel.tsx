@@ -5,8 +5,6 @@ export interface User {
   username: string;
   email: string;
   accessToken: string;
-  tokenType: string;
-  roles: string[];
 }
 
 interface SearchPanelProps {

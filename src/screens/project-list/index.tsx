@@ -18,9 +18,12 @@ export const ProjectListScreen = () => {
   const client = useHttp();
 
   const debouncedParam = useDebounce(param, 2000);
-
+  console.log(users);
   useEffect(() => {
-    client({ endpoint: `tasks/${qs.stringify(debouncedParam)}`, data: debouncedParam }).then(setList);
+    client({
+      endpoint: `tasks/${qs.stringify(debouncedParam)}`,
+      data: debouncedParam,
+    }).then(setList);
   }, [debouncedParam]);
 
   useMount(() => {
