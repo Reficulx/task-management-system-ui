@@ -22,7 +22,7 @@ export const login = (data: {username: string, password:string}) => {
     if (response.ok) {
       return handleUserResponse(await response.json())
     }else {
-      return Promise.reject(data) // similar to "throw a new error" 
+      return Promise.reject(await response.json()) // similar to "throw a new error" 
     }
   })
 } 
@@ -39,7 +39,7 @@ export const register = (data: {username: string, password:string, email:string}
     if (response.ok) {
       return handleUserResponse(await response.json())
     } else {
-      return Promise.reject(data)
+      return Promise.reject(await response.json())
     }
   })
 } 

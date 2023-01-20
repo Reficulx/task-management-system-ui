@@ -12,8 +12,13 @@ const defaultInitialState: State<null> = {
   error: null
 }
 
+const defaultConfig = {
+  throwOnError: false
+}
+
 // initial state will override default initial state here
-export const useAsync = <D>(initialState?: State<D>) => {
+export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defaultConfig) => {
+  const config = {...defaultConfig, initialConfig}
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState
@@ -39,11 +44,14 @@ export const useAsync = <D>(initialState?: State<D>) => {
     }
     setState({...state, status: 'loading'})
     return promise.then(data => {
-      setData(data)
-      return data
+      setData(data);
+      return data;
     }).catch(error => {
       setError(error)
-      return error
+      if (config.initialConfig?.throwOnError) {
+        return Promise.reject(error);
+      }
+      return Promise.reject(error)
     })
   }
 

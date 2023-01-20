@@ -1,4 +1,4 @@
-import { Button, Card, Divider } from "antd";
+import { Button, Card, Divider, Typography } from "antd";
 import { useState } from "react";
 import { LoginScreen } from "./login";
 import { RegisterScreen } from "./register";
@@ -10,6 +10,7 @@ import right from "assets/right.svg";
 // This component is the entrance for the login/register screens
 export const UnauthenticatedApp = () => {
   const [isRegistered, setIsRegistered] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   return (
     <Container>
@@ -17,7 +18,14 @@ export const UnauthenticatedApp = () => {
       <Background />
       <ShadowCard>
         <Title>{!isRegistered ? "User login" : "User Registration"}</Title>
-        {isRegistered ? <RegisterScreen /> : <LoginScreen />}
+        {error ? (
+          <Typography.Text type={"danger"}>{error.message}</Typography.Text>
+        ) : null}
+        {isRegistered ? (
+          <RegisterScreen onError={setError} />
+        ) : (
+          <LoginScreen onError={setError} />
+        )}
         <Divider />
         <Button type="link" onClick={() => setIsRegistered(!isRegistered)}>
           {isRegistered
