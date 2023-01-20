@@ -1,8 +1,8 @@
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { User } from "./search-panel";
 
-interface Task {
+export interface Task {
   id: string;
   username: string;
   title: string;
@@ -13,11 +13,14 @@ interface Task {
   completionTime: Date;
   status: string;
 }
-interface ListProps {
+// TableProps<RecordType>, Task is passed in props into <Table /> component by using it as RecordType
+// in the meantime, the parameters passed into <List /> are also stored in props, which is used as parameters using {...props} in <Table /> component
+// using props makes passing parameters to <List /> more convenient
+interface ListProps extends TableProps<Task> {
   users: User[];
-  list: Task[];
 }
-export const List = ({ list, users }: ListProps) => {
+
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
@@ -36,10 +39,12 @@ export const List = ({ list, users }: ListProps) => {
           render(value, task) {
             return (
               <span>
-                {task.creationTime ? dayjs(task.creationTime).format('YYYY-MM-DD') : "Unknown"}
+                {task.creationTime
+                  ? dayjs(task.creationTime).format("YYYY-MM-DD")
+                  : "Unknown"}
               </span>
-            )
-          }
+            );
+          },
         },
         {
           title: "User Name",
@@ -64,7 +69,7 @@ export const List = ({ list, users }: ListProps) => {
           },
         },
       ]}
-      dataSource={list}
+      {...props}
     />
   );
 };

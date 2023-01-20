@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { SearchPanel, User } from "./search-panel";
+import { useState } from "react";
+import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { cleanObject, useDebounce, useMount } from "utils";
-import { useHttp } from "utils/http";
-import qs from "qs";
+import { useDebounce } from "utils";
 import styled from "@emotion/styled";
+import { Typography } from "antd";
+import { useTasks } from "utils/task";
+import { useUsers } from "utils/user";
 
-const apiUrl = process.env.REACT_APP_API_URL; // `npm start` calls .env.development; `npm run build` calls .env
 export const ProjectListScreen = () => {
   // title is task title
   // username is the name of the users/assignee of the tasks
@@ -14,27 +14,18 @@ export const ProjectListScreen = () => {
     username: "",
     title: "",
   });
-  const [users, setUsers] = useState<User[]>([]);
-  const [list, setList] = useState([]);
-  const client = useHttp();
+  const debouncedParam = useDebounce(param, 2002);
+  const { isLoading, error, data: list } = useTasks(debouncedParam); // rename data as list using `data:list`
+  const { data: users } = useUsers();
 
-  const debouncedParam = useDebounce(param, 2000);
-  console.log(users);
-  useEffect(() => {
-    client({
-      endpoint: `tasks/${qs.stringify(debouncedParam)}`,
-      data: debouncedParam,
-    }).then(setList);
-  }, [debouncedParam]);
-
-  useMount(() => {
-    client({ endpoint: "users/all" }).then(setUsers);
-  });
   return (
     <Container>
       <h1>Tasks List</h1>
-      <SearchPanel users={users} param={param} setParam={setParam} />
-      <List users={users} list={list} />
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
+      {error ? (
+        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
+      ) : null}
+      <List loading={isLoading} users={users || []} dataSource={list || []} />
     </Container>
   );
 };

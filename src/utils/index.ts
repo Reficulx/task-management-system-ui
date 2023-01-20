@@ -2,15 +2,16 @@ import { useEffect, useState } from "react"
 
 // give any type to a variable is like programming with javascript again
 export const isFalsy = (value: unknown) => value === 0 ? false : !value // !! converts it to a boolean value
-export const cleanObject = (object: object) => {
+
+export const isVoid = (value:unknown) => value === undefined || value === null || value === '';
+
+export const cleanObject = (object: {[key:string]: unknown}) => {
   // Object.assign({}, object)
   const result = {...object} 
   Object.keys(result).forEach(key => {
-    //@ts-ignore
     const value = result[key]
     // eliminate the condition when value is zero
-    if (isFalsy(value)) {
-      //@ts-ignore
+    if (isVoid(value)) {
       delete result[key]
     }
   })
@@ -20,6 +21,7 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
+    // TODO: add callback to dependency will cause infinite loop
   }, [])
 }
 

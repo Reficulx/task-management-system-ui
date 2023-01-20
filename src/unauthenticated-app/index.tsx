@@ -16,15 +16,14 @@ export const UnauthenticatedApp = () => {
       <Header />
       <Background />
       <ShadowCard>
-        <Title>{!isRegistered ? "Please login!" : "Please register!"}</Title>
+        <Title>{!isRegistered ? "User login" : "User Registration"}</Title>
         {isRegistered ? <RegisterScreen /> : <LoginScreen />}
         <Divider />
-        <a onClick={() => setIsRegistered(!isRegistered)}>
-          {" "}
+        <Button type="link" onClick={() => setIsRegistered(!isRegistered)}>
           {isRegistered
             ? "Already have an account? Login!"
             : "No account? Register a new one!"}
-        </a>
+        </Button>
       </ShadowCard>
     </Container>
   );
@@ -41,8 +40,8 @@ const Title = styled.h2`
 
 const Header = styled.header`
   background: url(${logo}) no-repeat center;
-  padding: 5rem 0;
-  background-size: 8rem;
+  padding: 16rem 0;
+  background-size: 70rem;
   width: 100%;
 `;
 

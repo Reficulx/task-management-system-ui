@@ -2,8 +2,7 @@ import { useAuth } from "context/auth-context";
 import { ProjectListScreen } from "screens/project-list";
 import styled from "@emotion/styled";
 import { Row } from "components/lib";
-import softwareLogo from "assets/software-logo.svg";
-import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
+import { ReactComponent as SoftwareLogo } from "assets/default.svg";
 import { Dropdown, Menu } from "antd";
 
 // This component is the entrace for the screens after login
@@ -14,6 +13,9 @@ import { Dropdown, Menu } from "antd";
  */
 export const AuthenticatedApp = () => {
   const { logout, user } = useAuth();
+  // if using a svg file, we could use
+  // import {ReactComponent as SoftwareLogo } from "assets/software-logo.png" to use it as <SoftwareLogo/>
+  // in which we could pass down parameters and configure it in details
   return (
     <Container>
       <Header between={true}>
