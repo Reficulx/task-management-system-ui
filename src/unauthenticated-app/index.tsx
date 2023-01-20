@@ -7,6 +7,7 @@ import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
 
+// This component is the entrance for the login/register screens
 export const UnauthenticatedApp = () => {
   const [isRegistered, setIsRegistered] = useState(false);
 
@@ -53,7 +54,7 @@ const Background = styled.div`
   background-attachment: fixed;
   background-position: left bottom, right bottom;
   background-size: calc(((100vw - 40rem) / 2) - 3.2rem),
-    calc(((100vw - 40rem) / 2) - 3.2wrem), cover;
+    calc(((100vw - 40rem) / 2) - 3.2rem), cover;
   background-image: url(${left}), url(${right});
 `;
 const ShadowCard = styled(Card)`
