@@ -2,6 +2,9 @@ import { useAuth } from "context/auth-context";
 import { ProjectListScreen } from "screens/project-list";
 import styled from "@emotion/styled";
 import { Row } from "components/lib";
+import softwareLogo from "assets/software-logo.svg";
+import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
+import { Dropdown, Menu } from "antd";
 
 // This component is the entrace for the screens after login
 /**
@@ -10,23 +13,33 @@ import { Row } from "components/lib";
  * flex for content-based rendering; grid for design-based rendering
  */
 export const AuthenticatedApp = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   return (
-    <div>
+    <Container>
       <Header between={true}>
         <HeaderLeft gap={true}>
-          <h2>Logo</h2>
+          <SoftwareLogo width="18rem" color={"rgb(38,132,255)"} />
           <h2>Tasks</h2>
           <h2>Users</h2>
         </HeaderLeft>
         <HeaderRight>
-          <button onClick={logout}>Logout</button>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key={"logout"}>
+                  <a onClick={logout}>Logout</a>
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <a onClick={(e) => e.preventDefault()}>Hi, {user?.username}!</a>
+          </Dropdown>
         </HeaderRight>
       </Header>
       <Main>
         <ProjectListScreen />
       </Main>
-    </div>
+    </Container>
   );
 };
 
@@ -41,7 +54,10 @@ const Container = styled.div`
 `;
 
 // grid-area
-const Header = styled(Row)``;
+const Header = styled(Row)`
+  padding: 3.2rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+`;
 
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
