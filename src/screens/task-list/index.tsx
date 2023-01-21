@@ -6,14 +6,17 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useTasks } from "utils/task";
 import { useUsers } from "utils/user";
+import { useUrlQueryParam } from "utils/url";
 
 export const ProjectListScreen = () => {
   // title is task title
   // username is the name of the users/assignee of the tasks
-  const [param, setParam] = useState({
+  const [, setParam] = useState({
     username: "",
     title: "",
   });
+
+  const [param] = useUrlQueryParam(["username", "title"]);
   const debouncedParam = useDebounce(param, 2002);
   const { isLoading, error, data: list } = useTasks(debouncedParam); // rename data as list using `data:list`
   const { data: users } = useUsers();

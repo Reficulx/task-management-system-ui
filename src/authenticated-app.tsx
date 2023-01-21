@@ -3,11 +3,10 @@ import { ProjectListScreen } from "screens/task-list";
 import styled from "@emotion/styled";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/default.svg";
-import { Button, Dropdown, Menu } from "antd";
-import { Navigate, Route, Routes } from "react-router";
+import { Dropdown, Menu } from "antd";
+import { Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { TaskScreen } from "screens/task";
-import { resetRoute } from "utils";
 // This component is the entrace for the screens after login
 /**
  * grid vs flex
