@@ -6,11 +6,15 @@ import styled from "@emotion/styled";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
+import { Helmet } from "react-helmet";
+import { useDocumentTitle } from "utils";
 
 // This component is the entrance for the login/register screens
 export const UnauthenticatedApp = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  useDocumentTitle("Task Management System", false);
 
   return (
     <Container>

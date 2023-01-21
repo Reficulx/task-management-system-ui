@@ -40,3 +40,19 @@ export const useDebounce = ((value: any, delay?: number) => {
   
   return debouncedValue;
 }) 
+
+export const useDocumentTitle = (title:string, keepOnUnmount:boolean = true) => {
+  const oldTitle = document.title;
+
+  useEffect(() => {
+    document.title = title
+  }, [title])
+  // keepOnUnmount is used to control the state updated by a component that unmounts 
+  useEffect(() => {
+    return () => {
+      if(!keepOnUnmount) {
+        document.title = oldTitle; 
+      }
+    }
+  }, [])
+}
