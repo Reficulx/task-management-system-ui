@@ -1,4 +1,5 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Menu, Table, TableProps } from "antd";
+import { ButtonNoPadding } from "components/lib";
 import { Pin } from "components/pin";
 import dayjs from "dayjs";
 // the relationship between react-router and react-router-dom is similar to react and react-dom/react-native/...
@@ -24,6 +25,7 @@ export interface Task {
 interface ListProps extends TableProps<Task> {
   users: User[];
   refresh?: () => void;
+  setTaskModalOpen: (isOpen: boolean) => void;
 }
 
 export const List = ({ users, ...props }: ListProps) => {
@@ -85,6 +87,26 @@ export const List = ({ users, ...props }: ListProps) => {
                 {users.find((user: User) => user.username === task.username)
                   ?.email || "Unknown"}
               </span>
+            );
+          },
+        },
+        {
+          render(value, task) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key={"edit"}>
+                      <ButtonNoPadding
+                        type="link"
+                        onClick={() => props.setTaskModalOpen(true)}
+                      >Edit</ButtonNoPadding>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <ButtonNoPadding type="link">...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },

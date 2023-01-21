@@ -2,12 +2,15 @@ import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useTasks } from "utils/task";
 import { useUsers } from "utils/user";
 import { useUrlQueryParam } from "utils/url";
+import { ButtonNoPadding, Row } from "components/lib";
 
-export const ProjectListScreen = () => {
+export const TasksListScreen = (props: {
+  setTaskModalOpen: (isOpen: boolean) => void;
+}) => {
   // if there is a number id issue follow: const [param, setParam] = useTasksSearchParams();
   const [param, setParam] = useUrlQueryParam(["username", "title"]);
   // rule of thumb: primitives, component state could be set as dependencies
@@ -23,7 +26,15 @@ export const ProjectListScreen = () => {
   useDocumentTitle("Tasks List", false);
   return (
     <Container>
-      <h1>Tasks List</h1>
+      <Row marginBottom={2} between={true}>
+        <h1>Task List</h1>
+        <ButtonNoPadding
+          type="link"
+          onClick={() => props.setTaskModalOpen(true)}
+        >
+          Create Task
+        </ButtonNoPadding>
+      </Row>
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
@@ -33,12 +44,13 @@ export const ProjectListScreen = () => {
         loading={isLoading}
         users={users || []}
         dataSource={list || []}
+        setTaskModalOpen={props.setTaskModalOpen}
       />
     </Container>
   );
 };
 
-ProjectListScreen.whyDidYouRender = true;
+TasksListScreen.whyDidYouRender = true;
 
 const Container = styled.div`
   padding: 3.2rem;
