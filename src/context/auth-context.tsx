@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import * as auth from "auth-provider";
-import { User } from "screens/project-list/search-panel";
+import { User } from "screens/task-list/search-panel";
 import { http } from "utils/http";
 import { useMount } from "utils";
 import { useAsync } from "utils/use-async";
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return <FullPageLoading />;
   }
   if (isError) {
-    return <FullPageErrorFallback error={error}/>;
+    return <FullPageErrorFallback error={error} />;
   }
 
   return (

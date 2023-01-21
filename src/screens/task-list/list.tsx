@@ -1,5 +1,7 @@
 import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
+// the relationship between react-router and react-router-dom is similar to react and react-dom/react-native/...
+import { Link } from "react-router-dom";
 import { User } from "./search-panel";
 
 export interface Task {
@@ -29,6 +31,9 @@ export const List = ({ users, ...props }: ListProps) => {
           title: "Task Name",
           dataIndex: "title",
           sorter: (a, b) => a.title.localeCompare(b.title),
+          render(value, task) {
+            return <Link to={task.id}>{task.title}</Link>;
+          },
         },
         {
           title: "Description",

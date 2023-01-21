@@ -1,4 +1,4 @@
-import { Task } from "../screens/project-list/list";
+import { Task } from "../screens/task-list/list";
 import { useEffect } from "react";
 import { useHttp } from "utils/http";
 import { useAsync } from "./use-async";

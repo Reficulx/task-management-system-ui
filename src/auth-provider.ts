@@ -1,5 +1,5 @@
 // this file is not required if using third-party authentification service like firebase 
-import { User } from "screens/project-list/search-panel"
+import { User } from "screens/task-list/search-panel"
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const localStorageKey = "__auth_provider_token__"
