@@ -41,6 +41,7 @@ export const useDebounce = ((value: any, delay?: number) => {
   return debouncedValue;
 }) 
 
+
 export const useDocumentTitle = (title:string, keepOnUnmount:boolean = true) => {
   // useRef stores the document.title without being updated 
   const oldTitle = useRef(document.title).current;
@@ -59,3 +60,28 @@ export const useDocumentTitle = (title:string, keepOnUnmount:boolean = true) => 
 }
 
 export const resetRoute = () => (window.location.href = window.location.origin);
+
+export const subset = <O extends {[key in string]: unknown}, K extends keyof O> (
+  obj: O,
+  keys: K[]
+) => {
+  const filteredEntries = Object.entries(obj).filter(([key]) => {
+    keys.includes(key as K)
+  });
+  return Object.fromEntries(filteredEntries) as Pick<O, K>;
+}
+
+/**
+ * return the mount state of the component, if the component is unmounted, return false
+ * otherwise, return false
+ */
+export const useMountedRef = () => {
+  const mountedRef = useRef(false)
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    }
+  })
+  return mountedRef;
+}
