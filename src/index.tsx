@@ -1,3 +1,5 @@
+// whyDidYouRender must be imported first
+import whyDidYouRender from "@welldone-software/why-did-you-render";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

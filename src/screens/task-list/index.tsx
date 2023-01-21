@@ -11,12 +11,9 @@ import { useUrlQueryParam } from "utils/url";
 export const ProjectListScreen = () => {
   // title is task title
   // username is the name of the users/assignee of the tasks
-  const [, setParam] = useState({
-    username: "",
-    title: "",
-  });
-
-  const [param] = useUrlQueryParam(["username", "title"]);
+  const [param, setParam] = useUrlQueryParam(["username", "title"]);
+  // rule of thumb: primitives, component state could be set as dependencies
+  // non-component state object should not be set as dependencies for hooks
   const debouncedParam = useDebounce(param, 2002);
   const { isLoading, error, data: list } = useTasks(debouncedParam); // rename data as list using `data:list`
   const { data: users } = useUsers();
@@ -33,6 +30,8 @@ export const ProjectListScreen = () => {
     </Container>
   );
 };
+
+ProjectListScreen.whyDidYouRender = true;
 
 const Container = styled.div`
   padding: 3.2rem;
