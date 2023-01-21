@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "utils";
 
 interface State<D> {
@@ -34,14 +34,14 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
     error: null
   })
 
-  const setError = (error: Error) => setState({
+  const setError = useCallback((error: Error) => setState({
     error, 
     status: 'error',
     data: null
-  })
+  }), []);
 
   // function `run` triggers the async request
-  const run = (promise: Promise<D>, runConfig?: {retry: () => Promise<D>}) => {
+  const run = useCallback((promise: Promise<D>, runConfig?: {retry: () => Promise<D>}) => {
     // if there is no `then` attribute, then it is not a promise
     if (!promise || !promise.then) {
       throw new Error('Please give Promise type data!')
@@ -51,7 +51,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
         run(runConfig?.retry(), runConfig);
       }
     })
-    setState({...state, status: 'loading'})
+    setState(prevState => ({...prevState, status: 'loading'}));
     return promise.then(data => {
       if (mountedRef.current) {
         setData(data);
@@ -64,7 +64,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
       }
       return Promise.reject(error)
     })
-  }
+  }, [config.throwOnError, mountedRef, setData, setError])  
   return {
     isIdle: state.status === 'idle',
     isLoading: state.status === 'loading',

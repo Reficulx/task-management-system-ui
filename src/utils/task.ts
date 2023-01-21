@@ -1,5 +1,5 @@
 import { Task } from "../screens/task-list/list";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useHttp } from "utils/http";
 import { useAsync } from "./use-async";
 import qs from "qs";
@@ -9,8 +9,7 @@ export const useTasks = (param?: Partial<Task>) => {
   const client = useHttp();
   const { run, ...result } = useAsync<Task[]>(); // rename data as list using `data:list`
 
-  const fetchTasks = () => client({endpoint: `tasks/${qs.stringify(param)}`, data:param})
-
+  const fetchTasks = useCallback(() => client({endpoint: `tasks/${qs.stringify(param)}`, data:param}), [param, client]) 
   useEffect(() => {
     run(fetchTasks(), {
       retry: fetchTasks
@@ -26,7 +25,6 @@ export const useTasks = (param?: Partial<Task>) => {
 export const useEditTask = () => {
   const {run, ...asyncResult} = useAsync();
   const client = useHttp();
-  const {user} = useAuth();
   const mutate = (params: Partial<Task>) => {
     return run(client({
       endpoint: `tasks/update/id=${params.id}`,
