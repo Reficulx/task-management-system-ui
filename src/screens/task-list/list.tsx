@@ -1,11 +1,14 @@
 import { Table, TableProps } from "antd";
+import { Pin } from "components/pin";
 import dayjs from "dayjs";
 // the relationship between react-router and react-router-dom is similar to react and react-dom/react-native/...
 import { Link } from "react-router-dom";
+import { useEditTask } from "utils/task";
 import { User } from "./search-panel";
 
 export interface Task {
   id: string;
+  isPinned: boolean;
   username: string;
   title: string;
   description: string;
@@ -20,13 +23,29 @@ export interface Task {
 // using props makes passing parameters to <List /> more convenient
 interface ListProps extends TableProps<Task> {
   users: User[];
+  refresh?: () => void;
 }
 
 export const List = ({ users, ...props }: ListProps) => {
+  const { mutate } = useEditTask();
+  // functional programming
+  const pinProject = (id: string, username: string) => (isPinned: boolean) =>
+    mutate({ id, username, isPinned }).then(props.refresh);
   return (
     <Table
       pagination={false}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, task) {
+            return (
+              <Pin
+                checked={task.isPinned}
+                onCheckedChange={pinProject(task.id, task.username)}
+              />
+            );
+          },
+        },
         {
           title: "Task Name",
           dataIndex: "title",
@@ -34,10 +53,6 @@ export const List = ({ users, ...props }: ListProps) => {
           render(value, task) {
             return <Link to={task.id}>{task.title}</Link>;
           },
-        },
-        {
-          title: "Description",
-          dataIndex: "description",
         },
         {
           title: "Creation Time",
@@ -52,7 +67,7 @@ export const List = ({ users, ...props }: ListProps) => {
           },
         },
         {
-          title: "User Name",
+          title: "Assignee",
           render(value, task) {
             return (
               <span>

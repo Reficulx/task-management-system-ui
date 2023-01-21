@@ -27,6 +27,9 @@ export const http = async ({endpoint, data, token, headers, ...customConfig}: Co
     config.body = JSON.stringify(data || {})
   }
   */
+  if (config.method.toUpperCase() === "POST") {
+    config.body = JSON.stringify(data || {});
+  }
   return window.fetch(`${apiUrl}/${endpoint}`, config).then(async response => {
     if (response.status === 401) {
       await auth.logout()

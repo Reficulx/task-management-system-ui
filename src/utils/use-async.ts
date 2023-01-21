@@ -24,6 +24,8 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
     ...initialState
   })
 
+  const [retry, setRetry] = useState(() => () => {})
+
   const setData = (data:D) => setState({
     data, 
     status: 'success',
@@ -37,11 +39,16 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
   })
 
   // function `run` triggers the async request
-  const run = (promise: Promise<D>) => {
+  const run = (promise: Promise<D>, runConfig?: {retry: () => Promise<D>}) => {
     // if there is no `then` attribute, then it is not a promise
     if (!promise || !promise.then) {
       throw new Error('Please give Promise type data!')
     }
+    setRetry(()=> () =>  {
+      if (runConfig?.retry) {
+        run(runConfig?.retry(), runConfig);
+      }
+    })
     setState({...state, status: 'loading'})
     return promise.then(data => {
       setData(data);
@@ -54,7 +61,6 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
       return Promise.reject(error)
     })
   }
-
   return {
     isIdle: state.status === 'idle',
     isLoading: state.status === 'loading',
@@ -63,6 +69,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?:typeof defau
     run, 
     setData,
     setError,
+    retry,
     ...state
   }
 }
