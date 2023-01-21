@@ -14,7 +14,7 @@ export const UnauthenticatedApp = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  useDocumentTitle("Task Management System", false);
+  useDocumentTitle("TMS-entrance", false);
 
   return (
     <Container>
@@ -85,3 +85,29 @@ const Container = styled.div`
   align-items: center;
   min-height: 100vh;
 `;
+
+/**
+ * A typical pitfall when using react hook:
+ *
+ * const Test = () => {
+ *   let num = 1;
+ *   const effect = () => {
+ *     num += 1;
+ *     const message =  `num value in message: ${num}`
+ *
+ *     return function unmount() {
+ *       console.log(message);
+ *     }
+ *   }
+ *   return effect;
+ * }
+ * // execute test
+ * const add = test()
+ * // execute effect, generate first message value
+ * const unmount = add()
+ * add() // generate another message value
+ * add() // same as above
+ * add()
+ * add()
+ * unmount() // print out the first message value, which is 1, instead of 5, since message is not updated, but re-generated everytime
+ */

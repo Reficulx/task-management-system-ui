@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 // give any type to a variable is like programming with javascript again
 export const isFalsy = (value: unknown) => value === 0 ? false : !value // !! converts it to a boolean value
@@ -42,7 +42,8 @@ export const useDebounce = ((value: any, delay?: number) => {
 }) 
 
 export const useDocumentTitle = (title:string, keepOnUnmount:boolean = true) => {
-  const oldTitle = document.title;
+  // useRef stores the document.title without being updated 
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
     document.title = title
@@ -54,5 +55,5 @@ export const useDocumentTitle = (title:string, keepOnUnmount:boolean = true) => 
         document.title = oldTitle; 
       }
     }
-  }, [])
+  }, [keepOnUnmount, oldTitle])
 }

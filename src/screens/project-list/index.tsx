@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useDebounce } from "utils";
+import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useTasks } from "utils/task";
@@ -18,6 +18,7 @@ export const ProjectListScreen = () => {
   const { isLoading, error, data: list } = useTasks(debouncedParam); // rename data as list using `data:list`
   const { data: users } = useUsers();
 
+  useDocumentTitle("Tasks List", false);
   return (
     <Container>
       <h1>Tasks List</h1>
